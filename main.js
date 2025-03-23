@@ -1,26 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const username = "luanwitch";
-    const apiUrl = `https://api.github.com/users/${username}`;
+    const nameElement = document.querySelector('#name');
+    const userNameElement = document.querySelector('#username');
+    const avatarElement = document.querySelector('#avatar');
+    const reposElement = document.querySelector('#repos');
+    const followersElement = document.querySelector('#followers');
+    const followingElement = document.querySelector('#following');
+    const linkElement = document.querySelector('#link');
 
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao buscar os dados do GitHub");
-            }
-            return response.json();
+    fetch('https://api.github.com/users/tiago-silva-batista')
+        .then(function(res) {
+            return res.json();
         })
-        .then(data => {
-            // Preenche os dados na página
-            document.getElementById("avatar").src = data.avatar_url || "./imagens/default-avatar.jpg";
-            document.querySelector(".profile-name").textContent = data.name || "Nome não disponível";
-            document.querySelector(".profile-username").textContent = `@${data.login}`;
-            document.getElementById("repos").textContent = data.public_repos;
-            document.getElementById("followers").textContent = data.followers;
-            document.getElementById("following").textContent = data.following;
-            document.getElementById("github-link").href = data.html_url;
-        })
-        .catch(error => {
-            console.error("Erro:", error);
-            alert("Erro ao carregar os dados do GitHub. Tente novamente mais tarde.");
-        });
-});
+    .then(function(json) {
+        nameElement.innerHTML = json.name;
+        userNameElement.innerHTML = json.login;
+        avatarElement.src = json.avatar_url;
+        followingElement.innerHTML = json.following;
+        followersElement.innerHTML = json.followers;
+        reposElement.innerHTML = json.public_repos;
+        linkElement.href = json.html_url;
+    })
+})
